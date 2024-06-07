@@ -28,10 +28,12 @@ def login():
                 else:
                     return jsonify({"message": "Wrong password"}), 401
         except Exception as e:
-            return jsonify({"message": str(e)}), 400
+            return jsonify({"message": str(e)}), 405
     
 def parseBlockChain(epicId):
     global loggedIn
+    #parse the block chain
+    
     loggedIn = True
     return jsonify({"message": "Login Successful"}), 200
 
@@ -56,6 +58,9 @@ def vote():
             
             cursor = connection.cursor()
             cursor.execute("update party set votes = votes + 1 where name = '{}'".format(party))
+            
+            #raise event for block chain
+
             connection.commit()
                 
         except Error as e:
@@ -67,7 +72,6 @@ def vote():
                 connection.close()
                 print("MySQL connection is closed")
         
-        #raise event for block chain
     return jsonify({"message": "Vote Successful"}), 200
 
 if __name__ == '__main__':
